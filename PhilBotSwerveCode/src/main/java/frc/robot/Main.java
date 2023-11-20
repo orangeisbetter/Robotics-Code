@@ -20,9 +20,6 @@ public final class Main {
    * <p>If you change your main robot class, change the parameter type.
    */
   public static void main(String... args) {
-  
-    System.out.println("Memory available 0:" + Runtime.getRuntime().freeMemory());
-    System.out.println("hi mom");
     RobotBase.startRobot(Robot::new);
   }
 }

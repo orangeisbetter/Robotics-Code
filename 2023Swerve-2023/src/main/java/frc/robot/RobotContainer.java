@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-
+import frc.robot.commands.AutoClose;
 import frc.robot.commands.Autonomous;
 import frc.robot.commands.Balance2;
 import frc.robot.commands.Calibrate;
@@ -57,6 +57,7 @@ public class RobotContainer {
   private final LEDs leds;
   private final Gyro gyro;
   private final Claw claw;
+  private final UltraSensor sensor;
   // private final CameraSubsystem cameraSystem;
   
   // Controllers
@@ -97,7 +98,7 @@ public class RobotContainer {
     telescope = new Telescope();
     claw = new Claw();
     // Secondary subsystems
-    new UltraSensor();
+    sensor = new UltraSensor();
     
     // Initialize JoystickButton objects on Green controller (Driver 2)
     coneButton = new JoystickButton(gXbox, 5);
@@ -117,6 +118,7 @@ public class RobotContainer {
     swerve.setDefaultCommand(new TeleopDrive(swerve, gyro, rXbox, gXbox));
     shoulder.setDefaultCommand(uap);
     telescope.setDefaultCommand(new DumbTelescope(telescope));
+    claw.setDefaultCommand(new AutoClose(claw, sensor));
     
     // Button to change the arm presets to better suit cones
     coneButton.onTrue(new InstantCommand(() -> {
@@ -292,7 +294,7 @@ public class RobotContainer {
 
     );
 
-    return rightAuto;
+    return leftAuto;
 
     // return null;
     // HashMap<String, Command> eventMap = new HashMap<>();

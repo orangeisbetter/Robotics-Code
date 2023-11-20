@@ -17,4 +17,7 @@ public class UltraSensor extends SubsystemBase {
     public void periodic() {
         SmartDashboard.putNumber("Ultra Sensor!!!", sensor1.getRangeMM());
     }
+    public double range(){
+        return sensor1.getRangeMM();
+    }
 }

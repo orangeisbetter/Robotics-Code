@@ -27,5 +27,6 @@ public class Claw extends SubsystemBase {
         crabTriggered = open;
         crab.set(open ? Value.kForward : Value.kReverse);
     }
+
     
 }
