@@ -7,11 +7,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj.event.EventLoop;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -26,7 +23,6 @@ public class Robot extends TimedRobot {
 
   // Create object for driver 1's controller, it is an XboxController object with ID 0
   private XboxController driver1Controller = new XboxController(0);
-  private XboxController driver2Controller = new XboxController(1);
 
   // Method that is called once when the robot is turned on
   @Override
