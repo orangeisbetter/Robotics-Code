@@ -26,8 +26,8 @@ public class Robot extends TimedRobot {
   private TalonSRX rightMotor1 = new TalonSRX(3);
   private TalonSRX rightMotor2 = new TalonSRX(4);
 
-  private XboxController driver1Controller = new XboxController(0);
-
+  private XboxController driver1Controller = new XboxController(1);
+  private XboxController driver3Controller = new XboxController(3);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -76,9 +76,28 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     leftMotor1.set(ControlMode.PercentOutput, driver1Controller.getLeftY());
     leftMotor2.set(ControlMode.PercentOutput, driver1Controller.getLeftY());
-    
+//
+    leftMotor1.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
+    leftMotor2.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
+    //
     rightMotor1.set(ControlMode.PercentOutput, driver1Controller.getRightY());
     rightMotor2.set(ControlMode.PercentOutput, driver1Controller.getRightY());
+//
+    rightMotor1.set(ControlMode.PercentOutput, driver3Controller.getRightY());
+    rightMotor2.set(ControlMode.PercentOutput, driver3Controller.getRightY());
+
+    if(driver1Controller.getAButton() == true); {
+      System.out.println("Button A is pressed");
+    }
+    if(driver3Controller.getAButton() == true); {
+      System.out.println("Button A is pressed WEEEEEEE");
+    }
+    if(driver1Controller.getBButton() == true); {
+      System.out.println("Dolphins are evil");
+    }
+    if(driver3Controller.getBButton() == true); {
+      System.out.println("Frosty the Snowmannnnnnnn");
+    }
   }
 
   /** This function is called once when the robot is disabled. */
