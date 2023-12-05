@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,11 +29,12 @@ public class Robot extends TimedRobot {
   private TalonSRX rightMotor2 = new TalonSRX(4);
 
   private XboxController driver1Controller = new XboxController(1);
-  private XboxController driver3Controller = new XboxController(3);
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  private double factor = .25;
+  //private XboxController driver3Controller = new XboxController(3);
+  
+   //*This function is run when the robot is first started up and should be used for any
+   //* initialization code.
+  // */
   @Override
   public void robotInit() {
     leftMotor1.setInverted(true);
@@ -69,48 +72,57 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {  
+  }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    leftMotor1.set(ControlMode.PercentOutput, driver1Controller.getLeftY());
-    leftMotor2.set(ControlMode.PercentOutput, driver1Controller.getLeftY());
-//
-    leftMotor1.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
-    leftMotor2.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
-    //
-    rightMotor1.set(ControlMode.PercentOutput, driver1Controller.getRightY());
-    rightMotor2.set(ControlMode.PercentOutput, driver1Controller.getRightY());
-//
-    rightMotor1.set(ControlMode.PercentOutput, driver3Controller.getRightY());
-    rightMotor2.set(ControlMode.PercentOutput, driver3Controller.getRightY());
+   double driver1_leftx= driver1Controller.getLeftX();
+   double driver1_lefty= driver1Controller.getLeftY();
+   
+   if(driver1_leftx < .5 && driver1_leftx > -.5 ){
+    driver1_leftx = 0;
+   }
 
-    if(driver1Controller.getAButton() == true); {
-      System.out.println("Button A is pressed");
+   leftMotor1.set(ControlMode.PercentOutput,( driver1_lefty - driver1_leftx) * factor);
+   leftMotor2.set(ControlMode.PercentOutput, ( driver1_lefty - driver1_leftx) * factor);
+
+
+
+   //leftMotor1.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
+    //leftMotor2.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
+    
+    rightMotor1.set(ControlMode.PercentOutput, ( driver1_lefty + driver1_leftx) * factor);
+    rightMotor2.set(ControlMode.PercentOutput, ( driver1_lefty + driver1_leftx) * factor);
+    //rightMotor1.set(ControlMode.PercentOutput, driver3Controller.getRightY());
+    //rightMotor2.set(ControlMode.PercentOutput, driver3Controller.getRightY());
+  
+    if(driver1Controller.getAButton())
+    {
+      factor = .75;
     }
-    if(driver3Controller.getAButton() == true); {
-      System.out.println("Button A is pressed WEEEEEEE");
+    else{
+      factor = .25;
     }
-    if(driver1Controller.getBButton() == true); {
-      System.out.println("Dolphins are evil");
-    }
-    if(driver3Controller.getBButton() == true); {
-      System.out.println("Frosty the Snowmannnnnnnn");
-    }
+  
+  //driver1Controller.getPOV();
+
   }
 
   /** This function is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit (){} 
+  
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic () {} 
+
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit () {}
 
   /** This function is called periodically during test mode. */
   @Override
