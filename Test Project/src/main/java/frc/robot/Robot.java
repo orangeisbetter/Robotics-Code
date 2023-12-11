@@ -4,10 +4,13 @@
 
 package frc.robot;
 
+//import java.util.Timer;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -30,6 +33,7 @@ public class Robot extends TimedRobot {
 
   private XboxController driver1Controller = new XboxController(1);
   private double factor = .25;
+  private Timer auto_timer = new Timer();
   //private XboxController driver3Controller = new XboxController(3);
   
    //*This function is run when the robot is first started up and should be used for any
@@ -37,8 +41,8 @@ public class Robot extends TimedRobot {
   // */
   @Override
   public void robotInit() {
-    leftMotor1.setInverted(true);
-    leftMotor2.setInverted(true);
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
   }
 
   /**
@@ -63,11 +67,63 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    auto_timer.start();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    if (auto_timer.get() > 2) {
+      //leftMotor1.set(ControlMode.PercentOutput,( driver1_lefty - driver1_leftx) * factor);
+      //leftMotor2.set(ControlMode.PercentOutput, ( driver1_lefty - driver1_leftx) * factor);
+
+      //rightMotor1.set(ControlMode.PercentOutput,( driver1_righty - driver1_rightx) * factor);
+      //rightMotor2.set(ControlMode.PercentOutput, ( driver1_righty - driver1_rightx) * factor);
+      //System.out.println("startingmotors".get());
+      if (auto_timer.get() < 5) {
+
+        //System.out.println("startingmotors");
+        
+        leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
+
+        rightMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        rightMotor2.set(ControlMode.PercentOutput, (1) * factor);
+       // System.out.println("startingmotors".get());
+      }
+      else if(auto_timer.get() < 6.6){
+        leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
+
+        rightMotor1.set(ControlMode.PercentOutput,(0) * factor);
+        rightMotor2.set(ControlMode.PercentOutput, (0) * factor);
+      }
+      else if(auto_timer.get() < 10){
+
+       // System.out.println("shutupmotors");
+        leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
+
+        rightMotor1.set(ControlMode.PercentOutput,( 1) * factor);
+        rightMotor2.set(ControlMode.PercentOutput, ( 1) * factor);
+      }
+      else if(auto_timer.get() < 11.5){
+        leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
+
+        rightMotor1.set(ControlMode.PercentOutput,(0) * factor);
+        rightMotor2.set(ControlMode.PercentOutput, (0) * factor);
+      }
+      else if(auto_timer.get() < 13.2){
+        leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
+
+        rightMotor1.set(ControlMode.PercentOutput,(1) * factor);
+        rightMotor2.set(ControlMode.PercentOutput, (1) * factor);
+      }
+    }
+    
+    
   }
 
   /** This function is called once when teleop is enabled. */
@@ -81,7 +137,7 @@ public class Robot extends TimedRobot {
    double driver1_leftx= driver1Controller.getLeftX();
    double driver1_lefty= driver1Controller.getLeftY();
    
-   if(driver1_leftx < .5 && driver1_leftx > -.5 ){
+   if(driver1_leftx < .5 && driver1_leftx > -.5){
     driver1_leftx = 0;
    }
 
