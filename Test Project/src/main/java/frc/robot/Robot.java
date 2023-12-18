@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
   private XboxController driver1Controller = new XboxController(1);
   private double factor = .25;
   private Timer auto_timer = new Timer();
+  private Timer test_timer = new Timer();
  
 
   //private XboxController driver3Controller = new XboxController(3);
@@ -43,12 +44,12 @@ public class Robot extends TimedRobot {
   // */
   @Override
   public void robotInit() {
-    rightMotor1.setInverted(true);
-    rightMotor2.setInverted(true);
+    leftMotor1.setInverted(true);
+    leftMotor2.setInverted(true);
   }
 
 
-  public void setMotors(double Left1, double Left2, double Right1, double Right2)
+  public void setDriveMotors(double Left1, double Left2, double Right1, double Right2)
   {
     leftMotor1.set(ControlMode.PercentOutput,(Left1) * factor);
     leftMotor2.set(ControlMode.PercentOutput, (Left2) * factor);
@@ -60,25 +61,16 @@ public class Robot extends TimedRobot {
 
 
   public void DriveStraight() {
-    leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
-    leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
-
-    rightMotor1.set(ControlMode.PercentOutput,(1) * factor);
-    rightMotor2.set(ControlMode.PercentOutput, (1) * factor);
+    setDriveMotors(1,1,1,1);
   }
   public void DriveRight() {
-    leftMotor1.set(ControlMode.PercentOutput,(1) * factor);
-        leftMotor2.set(ControlMode.PercentOutput, (1) * factor);
-
-        rightMotor1.set(ControlMode.PercentOutput,(0) * factor);
-        rightMotor2.set(ControlMode.PercentOutput, (0) * factor);
+setDriveMotors(1,1,0,0);
   }
   public void DriveLeft() {
-    leftMotor1.set(ControlMode.PercentOutput,(0) * factor);
-        leftMotor2.set(ControlMode.PercentOutput, (0) * factor);
-
-        rightMotor1.set(ControlMode.PercentOutput,(1) * factor);
-        rightMotor2.set(ControlMode.PercentOutput, (1) * factor);
+    setDriveMotors(0,0,1,1);
+  }
+  public void DriveStop() {
+    setDriveMotors(0,0,0,0);
   }
     /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
@@ -116,25 +108,30 @@ public class Robot extends TimedRobot {
       //rightMotor2.set(ControlMode.PercentOutput, ( driver1_righty - driver1_rightx) * factor);
       //System.out.println("startingmotors".get());
       if (auto_timer.get() < 5) {
-         //DriveStraight();
-         setMotors(1,1,1,1);  // DriveStraight
+         DriveStraight();
+        // setDriveMotors(1,1,1,1);  // DriveStraight
       }
       else if(auto_timer.get() < 6.5){
-        setMotors(0,0,1,1); // DriveLeft
-        //setMotors(1,1,0,0); // DriveRight
+       // setDriveMotors(0,0,1,1); // DriveLeft
+        //setRunMotors(1,1,0,0); // DriveRight
+        DriveRight();
       }
       else if(auto_timer.get() < 10){
-        setMotors(1,1,1,1);  // DriveStraight
-      }
+       // setDriveMotors(1,1,1,1);  // DriveStraight
+       DriveStraight();
+     }
       else if(auto_timer.get() < 11.5){
-        //setMotors(1,1,0,0); // DriveRight
-        setMotors(0,0,1,1); // DriveLeft
+        //setDriveMotors(1,1,0,0); // DriveRight
+        //setRunMotors(0,0,1,1); // DriveLeft
+        DriveRight();
       }
       else if(auto_timer.get() < 13){
-        setMotors(1,1,1,1);  // DriveStraight
+       // setDriveMotors(1,1,1,1);  // DriveStraight
+       DriveStraight();
       }
-      else if(auto_timer.get() < 15){
-        setMotors(0,0,0,0); //StopDriving
+      else if(auto_timer.get() < 6.5){
+        //setDriveMotors(0,0,0,0); //StopDriving
+        DriveStop();
       }
     }
     
@@ -144,6 +141,9 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {  
+
+    test_timer.start();
+
   }
 
   /** This function is called periodically during operator control. */
