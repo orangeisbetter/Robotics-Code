@@ -8,6 +8,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -30,6 +31,7 @@ public class Robot extends TimedRobot {
 
   private TalonSRX rightMotor1 = new TalonSRX(3);
   private TalonSRX rightMotor2 = new TalonSRX(4);
+  private VictorSPX armMotor = new VictorSPX(10);
 
   private XboxController driver1Controller = new XboxController(1);
   private double factor = .25;
@@ -44,8 +46,9 @@ public class Robot extends TimedRobot {
   // */
   @Override
   public void robotInit() {
-    leftMotor1.setInverted(true);
-    leftMotor2.setInverted(true);
+    rightMotor1.setInverted(true);
+    rightMotor2.setInverted(true);
+    armMotor.setInverted(true);
   }
 
 
@@ -56,6 +59,12 @@ public class Robot extends TimedRobot {
 
     rightMotor1.set(ControlMode.PercentOutput,(Right1) * factor);
     rightMotor2.set(ControlMode.PercentOutput, (Right2) * factor);
+
+  }
+  public void setarmMotor (double motorValue)
+  {
+    armMotor.set(ControlMode.PercentOutput,(motorValue) * factor);
+  
 
   }
 
@@ -109,27 +118,30 @@ setDriveMotors(1,1,0,0);
       //System.out.println("startingmotors".get());
       if (auto_timer.get() < 5) {
          DriveStraight();
+        setarmMotor(1);
         // setDriveMotors(1,1,1,1);  // DriveStraight
       }
       else if(auto_timer.get() < 6.5){
        // setDriveMotors(0,0,1,1); // DriveLeft
         //setRunMotors(1,1,0,0); // DriveRight
+        setarmMotor(0);
         DriveRight();
+        
       }
       else if(auto_timer.get() < 10){
        // setDriveMotors(1,1,1,1);  // DriveStraight
        DriveStraight();
-     }
+      }
       else if(auto_timer.get() < 11.5){
         //setDriveMotors(1,1,0,0); // DriveRight
         //setRunMotors(0,0,1,1); // DriveLeft
         DriveRight();
       }
-      else if(auto_timer.get() < 13){
+      else if(auto_timer.get() < 14){
        // setDriveMotors(1,1,1,1);  // DriveStraight
        DriveStraight();
       }
-      else if(auto_timer.get() < 6.5){
+      else if(auto_timer.get() < 16.5){
         //setDriveMotors(0,0,0,0); //StopDriving
         DriveStop();
       }
@@ -143,8 +155,14 @@ setDriveMotors(1,1,0,0);
   public void teleopInit() {  
 
     test_timer.start();
+    setarmMotor(1);
 
   }
+  
+
+
+  
+
 
   /** This function is called periodically during operator control. */
   @Override
