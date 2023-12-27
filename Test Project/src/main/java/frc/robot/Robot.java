@@ -130,20 +130,25 @@ setDriveMotors(1,1,0,0);
       }
       else if(auto_timer.get() < 10){
        // setDriveMotors(1,1,1,1);  // DriveStraight
+       setarmMotor(1);
        DriveStraight();
       }
       else if(auto_timer.get() < 11.5){
         //setDriveMotors(1,1,0,0); // DriveRight
         //setRunMotors(0,0,1,1); // DriveLeft
+        setarmMotor(0);
         DriveRight();
       }
       else if(auto_timer.get() < 14){
        // setDriveMotors(1,1,1,1);  // DriveStraight
+       setarmMotor(1);
        DriveStraight();
       }
       else if(auto_timer.get() < 16.5){
         //setDriveMotors(0,0,0,0); //StopDriving
         DriveStop();
+        setarmMotor(0);
+
       }
     }
     
@@ -155,7 +160,7 @@ setDriveMotors(1,1,0,0);
   public void teleopInit() {  
 
     test_timer.start();
-    setarmMotor(1);
+    //setarmMotor(1);
 
   }
   
@@ -174,19 +179,36 @@ setDriveMotors(1,1,0,0);
     driver1_leftx = 0;
    }
 
-   leftMotor1.set(ControlMode.PercentOutput,( driver1_lefty - driver1_leftx) * factor);
-   leftMotor2.set(ControlMode.PercentOutput, ( driver1_lefty - driver1_leftx) * factor);
+    leftMotor1.set(ControlMode.PercentOutput,( -driver1_lefty + driver1_leftx) * factor);
+    leftMotor2.set(ControlMode.PercentOutput, ( -driver1_lefty + driver1_leftx) * factor);
 
+    rightMotor1.set(ControlMode.PercentOutput, ( -driver1_lefty - driver1_leftx) * factor);
+    rightMotor2.set(ControlMode.PercentOutput, ( -driver1_lefty - driver1_leftx) * factor);
 
-
-   //leftMotor1.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
-    //leftMotor2.set(ControlMode.PercentOutput, driver3Controller.getLeftY());
     
-    rightMotor1.set(ControlMode.PercentOutput, ( driver1_lefty + driver1_leftx) * factor);
-    rightMotor2.set(ControlMode.PercentOutput, ( driver1_lefty + driver1_leftx) * factor);
-    //rightMotor1.set(ControlMode.PercentOutput, driver3Controller.getRightY());
-    //rightMotor2.set(ControlMode.PercentOutput, driver3Controller.getRightY());
-  
+
+
+    if(driver1Controller.getBButtonPressed())
+    {
+      setarmMotor(1);
+    }
+    if(driver1Controller.getBButtonReleased())
+    {
+      setarmMotor(0);
+    }
+
+    if(driver1Controller.getYButtonPressed())
+    {
+      setarmMotor(-1);
+    }
+    if(driver1Controller.getYButtonReleased())
+    {
+      setarmMotor(0);
+    }
+
+
+
+    
     if(driver1Controller.getAButton())
     {
       factor = .75;
