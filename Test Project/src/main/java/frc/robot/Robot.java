@@ -4,12 +4,15 @@
 
 package frc.robot;
 
+import java.security.spec.EncodedKeySpec;
+
 //import java.util.Timer;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj.Encoder;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,10 +37,14 @@ public class Robot extends TimedRobot {
   private TalonSRX rightMotor2 = new TalonSRX(4);
   private VictorSPX armMotor = new VictorSPX(10);
 
-  private XboxController driver1Controller = new XboxController(1);
+  private XboxController driver1Controller = new XboxController(0);
   private double factor = .25;
   private Timer auto_timer = new Timer();
   private Timer test_timer = new Timer();
+  private Encoder motorEncoder = new Encoder (1,2);
+
+  
+
  
 
   //private XboxController driver3Controller = new XboxController(3);
@@ -70,7 +78,7 @@ public class Robot extends TimedRobot {
 
 
   public void DriveStraight() {
-    setDriveMotors(1,1,1,1);
+    setDriveMotors(1,1,1,.9);
   }
   public void DriveRight() {
 setDriveMotors(1,1,0,0);
@@ -172,6 +180,12 @@ setDriveMotors(1,1,0,0);
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    motorEncoder.setDistancePerPulse(4.0 / 256.0);
+    double distance = motorEncoder.getDistance();
+    double rate = motorEncoder.getRate();
+    motorEncoder.setSamplesToAverage(5);
+    System.out.println (distance + "/" + rate);
+
    double driver1_leftx= driver1Controller.getLeftX();
    double driver1_lefty= driver1Controller.getLeftY();
    
