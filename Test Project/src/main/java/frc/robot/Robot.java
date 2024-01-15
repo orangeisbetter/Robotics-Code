@@ -41,7 +41,7 @@ public class Robot extends TimedRobot {
   private double factor = .25;
   private Timer auto_timer = new Timer();
   private Timer test_timer = new Timer();
-  private Encoder motorEncoder = new Encoder (1,2);
+  private Encoder motorEncoder = new Encoder (0,1);
 
   
 
@@ -80,6 +80,9 @@ public class Robot extends TimedRobot {
   public void DriveStraight() {
     setDriveMotors(1,1,1,.9);
   }
+  public void DriveBackward(){
+    setDriveMotors(-1,-1,-1,-1);
+  }
   public void DriveRight() {
 setDriveMotors(1,1,0,0);
   }
@@ -112,12 +115,42 @@ setDriveMotors(1,1,0,0);
   @Override
   public void autonomousInit() {
     auto_timer.start();
+    setarmMotor(1);
+    motorEncoder.reset();
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    if (auto_timer.get() > 2) {
+  public void autonomousPeriodic(){
+    double distance = Math.abs(motorEncoder.getDistance());
+    
+    if(Math.abs(distance) < 45000){
+      System.out.println (distance);
+        DriveRight();
+        
+      }
+    else if (Math.abs(distance) > 90000){
+      System.out.println (distance);
+        DriveLeft();
+
+    }
+    else if (Math.abs(distance) < 80000){
+      //motorEncoder.reset();
+    }
+    }
+  
+  public void autonomousPeriodic2() {
+      /*if (auto_timer.get() > 2) {
+              DriveBackward();
+      }
+      if (auto_timer.get() > 6) {
+        DriveStop();
+      }
+      if (auto_timer.get() > 6.2) {
+        setarmMotor(1);
+      }*/
+    
+      if (auto_timer.get() > 2) {
       //leftMotor1.set(ControlMode.PercentOutput,( driver1_lefty - driver1_leftx) * factor);
       //leftMotor2.set(ControlMode.PercentOutput, ( driver1_lefty - driver1_leftx) * factor);
 
@@ -126,19 +159,19 @@ setDriveMotors(1,1,0,0);
       //System.out.println("startingmotors".get());
       if (auto_timer.get() < 5) {
          DriveStraight();
-        setarmMotor(1);
+        //setarmMotor(1);
         // setDriveMotors(1,1,1,1);  // DriveStraight
       }
       else if(auto_timer.get() < 6.5){
        // setDriveMotors(0,0,1,1); // DriveLeft
         //setRunMotors(1,1,0,0); // DriveRight
-        setarmMotor(0);
-        DriveRight();
+        //setarmMotor(0);
+        DriveLeft();
         
       }
       else if(auto_timer.get() < 10){
        // setDriveMotors(1,1,1,1);  // DriveStraight
-       setarmMotor(1);
+       //setarmMotor(1);
        DriveStraight();
       }
       else if(auto_timer.get() < 11.5){
@@ -166,7 +199,7 @@ setDriveMotors(1,1,0,0);
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {  
-
+   motorEncoder.reset();
     test_timer.start();
     //setarmMotor(1);
 
@@ -180,8 +213,10 @@ setDriveMotors(1,1,0,0);
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    motorEncoder.setDistancePerPulse(4.0 / 256.0);
-    double distance = motorEncoder.getDistance();
+   // motorEncoder.setDistancePerPulse(4.0 / 256.0);
+   //distance is the motorEncoder value
+    double distance = Math.abs(motorEncoder.getDistance());
+  
     double rate = motorEncoder.getRate();
     motorEncoder.setSamplesToAverage(5);
     System.out.println (distance + "/" + rate);
@@ -199,16 +234,25 @@ setDriveMotors(1,1,0,0);
     rightMotor1.set(ControlMode.PercentOutput, ( -driver1_lefty - driver1_leftx) * factor);
     rightMotor2.set(ControlMode.PercentOutput, ( -driver1_lefty - driver1_leftx) * factor);
 
-    
+    if(Math.abs(distance) > 5000){
+      DriveRight();
+    }
+    else if (Math.abs(distance) > 25000){
+      System.out.println (distance);
+      motorEncoder.reset();
+    }
 
 
     if(driver1Controller.getBButtonPressed())
     {
       setarmMotor(1);
+
+     
     }
     if(driver1Controller.getBButtonReleased())
     {
       setarmMotor(0);
+      motorEncoder.reset();
     }
 
     if(driver1Controller.getYButtonPressed())
